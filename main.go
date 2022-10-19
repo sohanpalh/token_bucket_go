@@ -3,17 +3,17 @@ package main
 import (
   "fmt"
   "time"
-	"context"
-	"github.com/go-co-op/gocron"
+  "context"
+  "github.com/go-co-op/gocron"
   "github.com/go-redis/redis/v8"
 )
 
 type TokenBucket struct {
-	minuteLimit   int
-	hourLimit     int
-	dayLimit      int
-	redisClient   redis.Cmdable
-	scheduler     *gocron.Scheduler
+  minuteLimit   int
+  hourLimit     int
+  dayLimit      int
+  redisClient   redis.Cmdable
+  scheduler     *gocron.Scheduler
 }
 
 func main() {
@@ -21,17 +21,17 @@ func main() {
 
   // Define redis client as per config
   client := redis.NewClient(&redis.Options{
-		Addr: "localhost:6379",
-		DB:   1,
-	})
+    Addr: "localhost:6379",
+    DB:   1,
+  })
 
-	tokenBucket := TokenBucket{		
-		minuteLimit: 1,
-		hourLimit:   10,
-		dayLimit:    100,
+  tokenBucket := TokenBucket{		
+    minuteLimit: 1,
+    hourLimit:   10,
+    dayLimit:    100,
     redisClient: client,
     scheduler:   scheduler,
-	}
+  }
 
   // Schedule Crons to fill token buckets
   err := tokenBucket.scheduleTokenFillCron(tokenBucket.dayLimit, "day", "0 0 * * *")
